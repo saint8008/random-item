@@ -1,10 +1,12 @@
-import ProductCard from "./components/ProductCard.jsx"
+import RandomProduct from "./components/ProductCard.jsx"
 
-function App() {
+function App() {  
 
   return (
-    <div>
-      <ProductCard />
+    <div className="h-screen p-5">
+      <div className='grid grid-cols-2 xl:grid-cols-4 gap-5'>
+        <RandomProduct />
+      </div>
     </div>
   )
 }
