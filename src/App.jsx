@@ -1,14 +1,10 @@
-import RandomProduct from "./components/ProductCard.jsx"
+import RandomProduct from './components/RandomProduct';
 
-function App() {  
-
+export default function App() {
   return (
-    <div className="h-screen p-5">
-      <div className='grid grid-cols-2 xl:grid-cols-4 gap-5'>
-        <RandomProduct />
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      <h1 className="text-3xl font-bold text-center pt-8">Fake Store</h1>
+      <RandomProduct />
     </div>
-  )
+  );
 }
-
-export default App

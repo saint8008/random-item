@@ -1,63 +1,51 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
 
 export default function RandomProduct() {
-	// fetch products depending on the product id https://fakestoreapi.com/products/${productId}
-    const [productId, setProductId] = useState(()=> Math.floor(Math.random() * 20) + 1);
-    const [product, setProduct] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+  const [productId, setProductId] = useState(1);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-
-	useEffect(() => {
-        async function fetchProduct() {
-            setLoading(true);
-            setError(null);
-
-            try {
-                const response = await fetch(
-                    `product id https://fakestoreapi.com/products/${productId}`
-                );
-
-                if (!response.ok) {
-                    throw new Error(`Response failed with status ${response.status}`)
-                }
-
-                const data = await response.json();
-                setProduct(data);
-            } catch (error) {
-                setError(error.message)
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchProduct();
-    }, [productId]);
-
-    function randomize() {
-        // implement a randomize function that returns a random integer from 1 to 20 and updates the productId state variable
-        let randomId;
-
-        do {
-            randomId = Math.floor(Math.random() * 20) + 1;
-        } while (randomId === productId);
-
-        setProductId(randomId);
+  useEffect(() => {
+    async function fetchProduct() {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(`https://fakestoreapi.com/products/${productId}`);
+        if (!response.ok) throw new Error(`Status ${response.status}`);
+        const data = await response.json();
+        console.log('fetched:', data);
+        setProduct(data);
+      } catch (err) {
+        console.log('fetch error:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     }
+    fetchProduct();
+  }, [productId]);
 
-	return (
-		<div className="flex flex-col items-center gap-4 p-6 max-w-md mx-auto">
-            <button
-                onClick={randomize}
-                className="px-4 py-2 rounded-lg bg-black text-white cursor-pointer"
-            >
-                Random Product
-            </button>
+  function randomize() {
+    setProductId(Math.floor(Math.random() * 20) + 1);
+  }
 
-            {loading && <p>Loading ...</p>}
-            {error && <p className="text-red-500">Something went wrong: {error}</p>}
-            {!loading && !error && product && <ProductCard {...product}/>}
-		</div>
-	);
+  return (
+    <div className="flex flex-col items-center gap-4 p-6 max-w-md mx-auto">
+      <button
+        onClick={randomize}
+        className="px-4 py-2 rounded-lg bg-black text-white cursor-pointer"
+      >
+        Random product
+      </button>
+
+      <p className="text-sm text-gray-500">
+        id: {productId} | loading: {String(loading)} | error: {String(error)} |
+        title: {product?.title ?? 'none'}
+      </p>
+
+      {product && <ProductCard {...product} />}
+    </div>
+  );
 }
